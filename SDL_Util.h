@@ -1,2 +1,0 @@
-//Holds main SDL Utilites
-
