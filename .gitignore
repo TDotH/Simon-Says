@@ -18,3 +18,9 @@ Simon Says.cbp
 SDL_Util.h
 
 SDL2.dll
+
+libpng16-16.dll
+
+SDL2_image.dll
+
+obj/Debug/SDLUtil.o
