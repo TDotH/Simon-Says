@@ -36,6 +36,7 @@ void list::insert( int val, node *& head ) {
 
         node * aNode = new node( val );
         head = aNode;
+        size++;
     }
     return;
 }
@@ -60,7 +61,7 @@ int list::getValAt( int place, node * head ) {
     int returnVal = 0;
 
     //Found the node and node exists
-    if ( ( place == 0 ) && head ) {
+    if ( ( place == 1 ) && head ) {
 
         returnVal = head->val;
     } else {

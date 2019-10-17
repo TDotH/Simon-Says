@@ -2,14 +2,9 @@
 
 
 //Initializes SDL
-SDL_Window * initSDL() {
-
-    int width  = 800;
-    int height = 600;
+SDL_Window * initSDL( SDL_Surface *& mainSurface, int width, int height ) {
 
     const char * title = "Simon Says v1.0";
-
-
 
     SDL_Window * mainWindow = NULL;
 
@@ -20,7 +15,10 @@ SDL_Window * initSDL() {
     } else {
 
         //Create Window
-        mainWindow = SDL_CreateWindow( title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, height, width, 0 );
+        mainWindow = SDL_CreateWindow( title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN );
+
+        //Create window surface
+        mainSurface = SDL_GetWindowSurface( mainWindow );
 
         //Load support for PNG image format
         int imgFlags = IMG_INIT_PNG;

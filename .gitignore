@@ -24,3 +24,13 @@ libpng16-16.dll
 SDL2_image.dll
 
 obj/Debug/SDLUtil.o
+
+images/BLUE_LEFT.png
+
+images/GREEN_DOWN.png
+
+images/YELLOW_UP.png
+
+images/RED_RIGHT.png
+
+zlib1.dll

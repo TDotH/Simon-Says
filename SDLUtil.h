@@ -8,7 +8,7 @@
 #include <SDL_Image.h>
 
 //Initializes SDL
-SDL_Window * initSDL();
+SDL_Window * initSDL( SDL_Surface *& mainSurface, int width, int height);
 
 //Loads an optimized image
 SDL_Surface * loadImage( const char * imageLoc, SDL_Surface * mainSurface );
