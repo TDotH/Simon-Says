@@ -34,11 +34,6 @@ class simonSays {
         const int HEIGHT = 600;
         const int BOXSIZE = 400;
 
-        //Random number generation
-        std::random_device rd;
-        std::mt19937 mt(rd());
-        std::uniform_int_distribution<int> dist(1, 4);
-
         list simonList;
         //color simonColors;
 
@@ -50,8 +45,8 @@ class simonSays {
 
         //int getRandomInt();
 
-        void simonTurn ( list aList );
-        bool playerTurn( list aList );
+        void simonTurn ( list& aList );
+        bool playerTurn( list& aList );
 
         void initGame();
 };

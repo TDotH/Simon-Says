@@ -25,6 +25,13 @@ simonSays::simonSays() {
 //Destructor
 simonSays::~simonSays() {
 
+    //Free loaded surfaces
+    for ( int i = 0; i < COLOR_TOTAL; i++ ) {
+
+            SDL_FreeSurface( colorSurfaces[ i ] );
+            colorSurfaces[ i ] == NULL;
+    }
+
     //Closes SDL Subsystems
     closeSDL( mainWindow, mainSurface );
 
@@ -34,22 +41,20 @@ simonSays::~simonSays() {
 void simonSays::play() {
 
     //Win/Lose Flag
-    bool winFlag = false;
+    bool winFlag = true;
 
     int score = 0;
 
-    for ( int i = 1; i <= 4; i++ ) {
-
-        simonList.insert( i );
-    }
-
-    simonTurn( simonList );
+    //std::random_device rd;
+    std::mt19937 mt( time(0) );
+    //std::default_random_engine gen( time(0) );
+    std::uniform_int_distribution<int> dist(1, 4);
 
     //Main game loop
     while ( winFlag ) {
 
             //Add a random number [1,4] to the list
-            simonList.insert( dist( mt );
+            simonList.insert( dist( mt ) );
 
             printf( "Simon's turn!\n" );
             simonTurn( simonList );
@@ -57,16 +62,20 @@ void simonSays::play() {
             //SDL_Delay( 2000 );
             printf( "Your turn!\n" );
 
-            winFlag = playerTurn( simonList );
+            winFlag = playerTurn( simonList ) ;
 
             if ( winFlag ) {
 
                 score++;
+                //printf( "Congrats! Your score is now %d\n", score );
+
             }
+
     }
 
-    printf( "Game Over!\n" );
-    printf( "Your score is: %d\n", score );
+    printf( "\nGame Over!\n" );
+    printf( "Your final score is: %d\n", score );
+    SDL_Delay( 1000 );
 
     return;
 }
@@ -85,29 +94,37 @@ int simonSays::getRandomInt() {
 }*/
 
 //Replays what is in list
-void simonSays::simonTurn( list aList ) {
+void simonSays::simonTurn( list& aList ) {
 
     for ( int place = 1; place <= aList.getSize(); place++ ) {
 
             SDL_BlitScaled( colorSurfaces[ aList.getValAt( place ) ], NULL, mainSurface, &boxRect );
             SDL_UpdateWindowSurface( mainWindow );
             SDL_Delay( 2000 );
+
+            //Reset window
+            SDL_BlitScaled( colorSurfaces[ DEFAULT ], NULL, mainSurface, &boxRect );
+            SDL_UpdateWindowSurface( mainWindow );
+            SDL_Delay( 500 );
     }
 
     //Reset window
     SDL_BlitScaled( colorSurfaces[ DEFAULT ], NULL, mainSurface, &boxRect );
     SDL_UpdateWindowSurface( mainWindow );
-    SDL_Delay( 2000 );
+    SDL_Delay( 1000 );
 
     return;
 }
 
-bool simonSays::playerTurn( list aList ) {
+bool simonSays::playerTurn( list& aList ) {
 
     bool correct = true;
     int place = 1;
+    int choice = 0;
 
     SDL_Event playerInput;
+
+    //Reset event queue
 
     do {
 
@@ -119,14 +136,54 @@ bool simonSays::playerTurn( list aList ) {
 
                     correct = false;
             }
-            else if ( playerInput.type == SDL_KEYUP ) {
+            else if ( playerInput.type == SDL_KEYDOWN ) {
 
-                    switch ( playerInput.key
+                    switch ( playerInput.key.keysym.sym ) {
 
+                        case( SDLK_UP ) :
+                            SDL_BlitScaled( colorSurfaces[ YELLOW_UP ], NULL, mainSurface, &boxRect );
+                            choice = YELLOW_UP;
+                            break;
 
+                        case( SDLK_DOWN ) :
+                            SDL_BlitScaled( colorSurfaces[ GREEN_DOWN ], NULL, mainSurface, &boxRect );
+                            choice = GREEN_DOWN;
+                            break;
+
+                        case( SDLK_LEFT ) :
+                            SDL_BlitScaled( colorSurfaces[ BLUE_LEFT ], NULL, mainSurface, &boxRect );
+                            choice = BLUE_LEFT;
+                            break;
+
+                        case( SDLK_RIGHT ) :
+                            SDL_BlitScaled( colorSurfaces[ RED_RIGHT ], NULL, mainSurface, &boxRect );
+                            choice = RED_RIGHT;
+                            break;
+
+                        default:
+
+                            break;
+
+                    }
+
+                    SDL_UpdateWindowSurface( mainWindow );
+
+                    if ( !( choice == aList.getValAt( place ) ) ) {
+
+                        correct = false;
+                    } else {
+                        place++;
+                    }
+            }
         }
 
-    } while ( correct );
+    } while ( correct && ( place <= aList.getSize() ) );
+
+    //Reset window
+    SDL_Delay( 1000 );
+    SDL_BlitScaled ( colorSurfaces[ DEFAULT ], NULL, mainSurface, &boxRect );
+    SDL_UpdateWindowSurface( mainWindow );
+    SDL_Delay( 1000 );
 
     return correct;
 }
